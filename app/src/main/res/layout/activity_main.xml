@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/loadImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Image" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"
+        android:src="@android:drawable/ic_menu_camera"/>
+
+    <Button
+        android:id="@+id/invertImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invert Image"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
