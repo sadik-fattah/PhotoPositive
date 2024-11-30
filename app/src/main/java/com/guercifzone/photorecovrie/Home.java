@@ -1,6 +1,7 @@
 package com.guercifzone.photorecovrie;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,8 +33,9 @@ import java.io.FileNotFoundException;
 public class Home extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     private ImageView imageView;
-    private Button loadImageBtn, invertImageBtn,saveImageBtn;
+    private Button loadImageBtn, invertImageBtn,saveImageBtn ,refreshBtn;
     private ProgressBar progressBar;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,20 +51,34 @@ public class Home extends AppCompatActivity {
         invertImageBtn = findViewById(R.id.invertImageBtn);
         saveImageBtn =  findViewById(R.id.saveImageBtn);
         progressBar = findViewById(R.id.progressBar);
+        refreshBtn = findViewById(R.id.refreshBtn);
 
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reload the main activity
+                imageView.setImageDrawable(null);
+                invertImageBtn.setVisibility(View.INVISIBLE);
+                saveImageBtn.setVisibility(View.INVISIBLE);
+                loadImageBtn.setEnabled(true);
+                refreshBtn.setVisibility(View.INVISIBLE);
+            }
+        });
         loadImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
+                invertImageBtn.setVisibility(View.VISIBLE);
+
+
             }
         });
-
         invertImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Show the ProgressBar
                 progressBar.setVisibility(View.VISIBLE);
-
+                 loadImageBtn.setEnabled(false);
                 // Check if there's a drawable in the imageView
                 if (imageView.getDrawable() != null) {
                     Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -79,7 +95,8 @@ public class Home extends AppCompatActivity {
                         protected void onPostExecute(Bitmap invertedBitmap) {
                             // Hide the ProgressBar once the image is processed
                             progressBar.setVisibility(View.GONE);
-
+                            saveImageBtn.setVisibility(View.VISIBLE);
+                            invertImageBtn.setEnabled(false);
                             // Set the inverted image on the imageView
                             imageView.setImageBitmap(invertedBitmap);
                         }
@@ -87,10 +104,10 @@ public class Home extends AppCompatActivity {
                 }
             }
         });
-
         saveImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshBtn.setVisibility(View.VISIBLE);
                 if (ContextCompat.checkSelfPermission(Home.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Home.this,
