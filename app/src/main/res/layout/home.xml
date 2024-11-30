@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Home">
+    <Button
+        android:id="@+id/loadImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Image" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:src="@android:drawable/ic_menu_camera"/>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+    <Button
+        android:id="@+id/invertImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invert Image"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+    <Button
+        android:id="@+id/saveImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save Image"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
