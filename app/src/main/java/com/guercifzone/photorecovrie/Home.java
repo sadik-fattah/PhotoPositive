@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -46,6 +48,7 @@ public class Home extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         imageView = findViewById(R.id.imageView);
         loadImageBtn = findViewById(R.id.loadImageBtn);
         invertImageBtn = findViewById(R.id.invertImageBtn);
@@ -108,8 +111,8 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 refreshBtn.setVisibility(View.VISIBLE);
-                if (ContextCompat.checkSelfPermission(Home.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                saveImageBtn.setVisibility(View.INVISIBLE);
+            /*   if (ContextCompat.checkSelfPermission(Home.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Home.this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             1);
@@ -117,10 +120,30 @@ public class Home extends AppCompatActivity {
                     // Permission already granted, you can call the save function here
                     ImageSaver.SaveImageToGallery(Home.this, imageView);
                     Toast.makeText(getApplicationContext(), "Image saved successfully!", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    if (ContextCompat.checkSelfPermission(Home.this, android.Manifest.permission.READ_MEDIA_IMAGES)
+            != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(Home.this,
+                new String[]{Manifest.permission.READ_MEDIA_IMAGES},
+                1);
+    }
+}
             }
         });
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ImageSaver.SaveImageToGallery(Home.this, imageView);
+                Toast.makeText(getApplicationContext(), "Image saved successfully!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
